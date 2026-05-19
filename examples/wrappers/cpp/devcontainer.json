@@ -1,0 +1,18 @@
+{
+  "name": "tools-cpp-wrapper",
+  "image": "mcr.microsoft.com/devcontainers/cpp:1-bookworm",
+  "initializeCommand": "../scripts/validate-host-paths.sh",
+  "containerEnv": {
+    // Override locally for images that do not use /home/vscode, for example /root.
+    "TOOLS_CONTAINER_HOME": "${localEnv:TOOLS_CONTAINER_HOME:/home/vscode}"
+  },
+  "features": {
+    "ghcr.io/balazsdukai/devcontainer-tools/tools:1": {}
+  },
+  "mounts": [
+    "source=${localEnv:HOME}/.codex,target=${containerEnv:TOOLS_CONTAINER_HOME}/.codex,type=bind",
+    "source=${localEnv:HOME}/.claude,target=${containerEnv:TOOLS_CONTAINER_HOME}/.claude,type=bind",
+    "source=${localEnv:HOME}/.claude.json,target=${containerEnv:TOOLS_CONTAINER_HOME}/.claude.json,type=bind",
+    "source=${localEnv:HOME}/.config/gh,target=${containerEnv:TOOLS_CONTAINER_HOME}/.config/gh,type=bind"
+  ]
+}

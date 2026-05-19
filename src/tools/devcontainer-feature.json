@@ -1,0 +1,14 @@
+{
+  "id": "tools",
+  "version": "1.0.0",
+  "name": "Tools",
+  "description": "Installs language-neutral personal workflow tools for Debian and Ubuntu based devcontainers.",
+  "documentationURL": "https://github.com/balazsdukai/devcontainer-tools/tree/main/src/tools",
+  "options": {
+    "installClaude": {
+      "type": "boolean",
+      "default": true,
+      "description": "Install Claude Code in addition to the default tools."
+    }
+  }
+}
