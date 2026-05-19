@@ -9,7 +9,11 @@ above project-specific devcontainers without becoming part of them.
 
 - Codex
 - Claude Code by default
+- GitUI
+- Yazi
+- Helix
 - GitHub CLI
+- `just`
 - `fd`
 - `bat`
 - `jq`
