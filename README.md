@@ -10,8 +10,12 @@ above project-specific devcontainers without becoming part of them.
 - Codex
 - Claude Code by default
 - GitHub CLI
+- `fd`
+- `bat`
 - `jq`
+- `yq`
 - `ripgrep`
+- `ugrep`
 - `fzf`
 - small shell conveniences such as `less`, `procps`, and `bash-completion`
 

@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-for command in codex gh jq rg fzf; do
+for command in bat codex fd gh jq rg fzf ug ugrep yq; do
     command -v "$command" >/dev/null
 done
 
