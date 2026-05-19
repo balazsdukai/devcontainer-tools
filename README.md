@@ -85,5 +85,5 @@ examples/wrappers/scripts/            # wrapper validation helpers
 ```
 
 When the Dev Container CLI is available, the tests under `test/tools/` are also
-shaped for Feature test runners and exercise the same Feature against Rust,
-Python, and C++ sample configurations.
+shaped for Feature test runners and exercise the same Feature against generic
+Debian/Ubuntu bases plus the Rust scenario used for option coverage.

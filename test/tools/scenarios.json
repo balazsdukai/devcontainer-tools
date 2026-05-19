@@ -5,18 +5,6 @@
       "tools": {}
     }
   },
-  "python": {
-    "image": "mcr.microsoft.com/devcontainers/python:1-3.12-bookworm",
-    "features": {
-      "tools": {}
-    }
-  },
-  "cpp": {
-    "image": "mcr.microsoft.com/devcontainers/cpp:1-bookworm",
-    "features": {
-      "tools": {}
-    }
-  },
   "without-claude": {
     "image": "mcr.microsoft.com/devcontainers/rust:1-bookworm",
     "features": {
