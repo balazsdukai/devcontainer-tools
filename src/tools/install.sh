@@ -32,10 +32,9 @@ apt-get install -y --no-install-recommends \
     fzf \
     gh \
     git \
+    gnupg \
     jq \
     less \
-    nodejs \
-    npm \
     procps \
     ripgrep \
     tar \
@@ -43,6 +42,25 @@ apt-get install -y --no-install-recommends \
     ugrep \
     xz-utils
 rm -rf /var/lib/apt/lists/*
+
+install_nodejs() {
+    local node_major="22"
+    local keyring="/usr/share/keyrings/nodesource.gpg"
+    local sources_list="/etc/apt/sources.list.d/nodesource.list"
+
+    rm -f "$keyring"
+    curl -fsSL "https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key" |
+        gpg --dearmor -o "$keyring"
+    chmod 0644 "$keyring"
+
+    echo "deb [signed-by=${keyring}] https://deb.nodesource.com/node_${node_major}.x nodistro main" >"$sources_list"
+
+    apt-get update
+    apt-get install -y --no-install-recommends nodejs
+    rm -rf /var/lib/apt/lists/*
+}
+
+install_nodejs
 
 if ! command -v bat >/dev/null && command -v batcat >/dev/null; then
     ln -s "$(command -v batcat)" /usr/local/bin/bat

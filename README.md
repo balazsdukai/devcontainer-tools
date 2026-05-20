@@ -23,9 +23,10 @@ above project-specific devcontainers without becoming part of them.
 - `fzf`
 - small shell conveniences such as `less`, `procps`, and `bash-completion`
 
-It intentionally does not install project runtimes, compilers, package managers,
-or libraries. Rust, Python, C++, and project dependencies remain owned by each
-project image.
+It installs Node.js 22 only as the runtime for npm-distributed CLI tools such as
+Codex and Claude Code. It intentionally does not install project runtimes,
+compilers, package managers, or libraries beyond that tool dependency. Rust,
+Python, C++, and project dependencies remain owned by each project image.
 
 Personal auth and mutable state also stay outside the image. Mount them at
 runtime from private wrappers or project-local devcontainer overrides so rebuilt

@@ -1,6 +1,6 @@
 {
   "id": "tools",
-  "version": "1.3.0",
+  "version": "1.3.1",
   "name": "Tools",
   "description": "Installs language-neutral personal workflow tools for Debian and Ubuntu based devcontainers.",
   "documentationURL": "https://github.com/balazsdukai/devcontainer-tools/tree/main/src/tools",
