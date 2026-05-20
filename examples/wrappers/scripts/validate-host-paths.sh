@@ -5,7 +5,6 @@ required_paths=(
     "${HOME}/.codex"
     "${HOME}/.claude"
     "${HOME}/.claude.json"
-    "${HOME}/.config/gh"
 )
 
 missing=()

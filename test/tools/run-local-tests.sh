@@ -11,20 +11,17 @@ trap 'rm -rf "$tmp_home"' EXIT
 
 mkdir -p \
     "${tmp_home}/.codex" \
-    "${tmp_home}/.claude" \
-    "${tmp_home}/.config/gh"
+    "${tmp_home}/.claude"
 printf '{}' > "${tmp_home}/.claude.json"
 
 HOME="$tmp_home" "${wrapper_root}/scripts/validate-host-paths.sh"
 
 printf 'token' > "${tmp_home}/.codex/state"
 printf 'token' > "${tmp_home}/.claude/state"
-printf 'token' > "${tmp_home}/.config/gh/hosts.yml"
 printf '{"ok":true}' > "${tmp_home}/.claude.json"
 
 test -w "${tmp_home}/.codex/state"
 test -w "${tmp_home}/.claude/state"
-test -w "${tmp_home}/.config/gh/hosts.yml"
 test -w "${tmp_home}/.claude.json"
 
 rm -rf "${tmp_home}/.claude"
@@ -39,7 +36,7 @@ for wrapper in rust python cpp; do
     grep -F '${localEnv:HOME}/.codex' "${wrapper_root}/${wrapper}/devcontainer.json" >/dev/null
     grep -F '${localEnv:HOME}/.claude' "${wrapper_root}/${wrapper}/devcontainer.json" >/dev/null
     grep -F '${localEnv:HOME}/.claude.json' "${wrapper_root}/${wrapper}/devcontainer.json" >/dev/null
-    grep -F '${localEnv:HOME}/.config/gh' "${wrapper_root}/${wrapper}/devcontainer.json" >/dev/null
+    grep -F '"GH_TOKEN": "${localEnv:GH_TOKEN}"' "${wrapper_root}/${wrapper}/devcontainer.json" >/dev/null
 done
 
 if grep -R -F '.codex' "${feature_root}" >/dev/null; then

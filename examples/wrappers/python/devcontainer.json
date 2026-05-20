@@ -2,17 +2,22 @@
   "name": "tools-python-wrapper",
   "image": "mcr.microsoft.com/devcontainers/python:1-3.12-bookworm",
   "initializeCommand": "../scripts/validate-host-paths.sh",
+  "remoteUser": "vscode",
+  "containerUser": "vscode",
   "containerEnv": {
-    // Override locally for images that do not use /home/vscode, for example /root.
-    "TOOLS_CONTAINER_HOME": "${localEnv:TOOLS_CONTAINER_HOME:/home/vscode}"
+    "TOOLS_CONTAINER_HOME": "/home/vscode",
+    "SSH_AUTH_SOCK": "/ssh-agent"
+  },
+  "remoteEnv": {
+    "GH_TOKEN": "${localEnv:GH_TOKEN}"
   },
   "features": {
     "ghcr.io/balazsdukai/devcontainer-tools/tools:1": {}
   },
   "mounts": [
-    "source=${localEnv:HOME}/.codex,target=${containerEnv:TOOLS_CONTAINER_HOME}/.codex,type=bind",
-    "source=${localEnv:HOME}/.claude,target=${containerEnv:TOOLS_CONTAINER_HOME}/.claude,type=bind",
-    "source=${localEnv:HOME}/.claude.json,target=${containerEnv:TOOLS_CONTAINER_HOME}/.claude.json,type=bind",
-    "source=${localEnv:HOME}/.config/gh,target=${containerEnv:TOOLS_CONTAINER_HOME}/.config/gh,type=bind"
+    "source=${localEnv:HOME}/.codex,target=/home/vscode/.codex,type=bind",
+    "source=${localEnv:HOME}/.claude,target=/home/vscode/.claude,type=bind",
+    "source=${localEnv:HOME}/.claude.json,target=/home/vscode/.claude.json,type=bind",
+    "source=${localEnv:SSH_AUTH_SOCK},target=/ssh-agent,type=bind"
   ]
 }
