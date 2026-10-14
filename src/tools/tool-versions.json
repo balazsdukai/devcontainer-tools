@@ -1,0 +1,13 @@
+{
+  "github": {
+    "mikefarah/yq": null,
+    "gitui-org/gitui": null,
+    "sxyazi/yazi": null,
+    "helix-editor/helix": null,
+    "casey/just": null
+  },
+  "npm": {
+    "@openai/codex": null,
+    "@anthropic-ai/claude-code": null
+  }
+}

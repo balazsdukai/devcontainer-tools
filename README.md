@@ -142,3 +142,10 @@ examples/wrappers/scripts/            # wrapper validation helpers
 When the Dev Container CLI is available, the tests under `test/tools/` are also
 shaped for Feature test runners and exercise the same Feature against generic
 Debian/Ubuntu bases plus the Rust scenario used for option coverage.
+
+The monthly `Update stable tool versions` workflow checks the stable GitHub and
+npm releases recorded in `src/tools/tool-versions.json`. When versions change,
+it opens or updates a pull request and bumps the Feature patch version. The
+merge publishes the new Feature version to GHCR and creates a matching GitHub
+Release. Distro-provided tools continue to follow the stable repositories of
+the Debian or Ubuntu base image.

@@ -1,0 +1,77 @@
+name: Update stable tool versions
+
+on:
+  schedule:
+    - cron: "0 6 1 * *"
+  workflow_dispatch:
+
+permissions:
+  actions: write
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: monthly-tool-version-update
+  cancel-in-progress: false
+
+jobs:
+  update:
+    name: Check and propose stable updates
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Update pinned upstream versions
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: python3 src/tools/update-versions.py
+
+      - name: Stop when there are no updates
+        id: changes
+        run: |
+          if git diff --quiet; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Create update branch
+        if: steps.changes.outputs.changed == 'true'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git switch -C automation/monthly-tool-updates
+          git add src/tools/tool-versions.json src/tools/devcontainer-feature.json
+          git commit -m "Update stable tool versions"
+          git push --force origin automation/monthly-tool-updates
+
+      - name: Run Feature checks for the update branch
+        if: steps.changes.outputs.changed == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: gh workflow run test.yaml --ref automation/monthly-tool-updates
+
+      - name: Open or update pull request
+        if: steps.changes.outputs.changed == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          pr_number="$(gh pr list \
+            --base main \
+            --head automation/monthly-tool-updates \
+            --state open \
+            --json number \
+            --jq '.[0].number // empty')"
+          title="Update stable tool versions"
+          body="""This PR pins the latest stable releases for the upstream GitHub and npm tools and increments the Feature patch version. The existing test workflow is dispatched against this branch. After merge, the Feature is published to GHCR and a matching GitHub Release is created."""
+          if [[ -n "$pr_number" ]]; then
+            gh pr edit "$pr_number" --title "$title" --body "$body"
+          else
+            gh pr create \
+              --base main \
+              --head automation/monthly-tool-updates \
+              --title "$title" \
+              --body "$body"
+          fi

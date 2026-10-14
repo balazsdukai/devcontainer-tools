@@ -50,3 +50,5 @@ if grep -R -F '.claude' "${feature_root}" >/dev/null; then
 fi
 
 echo "local tools checks passed"
+
+python3 "${repo_root}/test/tools/test_update_versions.py"
