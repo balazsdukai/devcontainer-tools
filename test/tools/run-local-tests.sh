@@ -52,3 +52,4 @@ fi
 echo "local tools checks passed"
 
 python3 "${repo_root}/test/tools/test_update_versions.py"
+python3 "${repo_root}/test/tools/test_version_report.py"

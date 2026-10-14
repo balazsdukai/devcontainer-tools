@@ -65,13 +65,19 @@ jobs:
             --json number \
             --jq '.[0].number // empty')"
           title="Update stable tool versions"
-          body="""This PR pins the latest stable releases for the upstream GitHub and npm tools and increments the Feature patch version. The existing test workflow is dispatched against this branch. After merge, the Feature is published to GHCR and a matching GitHub Release is created."""
+          body_file="$RUNNER_TEMP/monthly-tool-update-pr.md"
+          {
+            echo "This PR pins the latest stable releases for the upstream GitHub and npm tools and increments the Feature patch version. The Feature checks run against this branch. After merge, the Feature is published to GHCR and a matching GitHub Release is created."
+            echo
+            echo "## Tool version updates"
+            python3 src/tools/version-report.py --base-ref main
+          } > "$body_file"
           if [[ -n "$pr_number" ]]; then
-            gh pr edit "$pr_number" --title "$title" --body "$body"
+            gh pr edit "$pr_number" --title "$title" --body-file "$body_file"
           else
             gh pr create \
               --base main \
               --head automation/monthly-tool-updates \
               --title "$title" \
-              --body "$body"
+              --body-file "$body_file"
           fi

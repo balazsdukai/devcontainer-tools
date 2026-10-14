@@ -42,7 +42,9 @@ jobs:
             exit 0
           fi
 
+          version_notes="$(python3 src/tools/version-report.py --base-ref "${{ github.event.before }}")"
           gh release create "$tag" \
             --target "$GITHUB_SHA" \
             --title "Tools $current_version" \
-            --generate-notes
+            --generate-notes \
+            --notes "$version_notes"
