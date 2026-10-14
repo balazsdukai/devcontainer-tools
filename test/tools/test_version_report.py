@@ -45,6 +45,21 @@ class VersionReportTests(unittest.TestCase):
             [("yq", "v4.53.0", "v4.54.1")],
         )
 
+    def test_renders_current_versions_when_release_has_no_pin_changes(self):
+        current = {
+            "github": {"mikefarah/yq": "v4.54.1"},
+            "npm": {"@openai/codex": "0.162.1"},
+        }
+
+        self.assertEqual(
+            version_report.current_versions(current),
+            [("yq", "v4.54.1"), ("Codex CLI", "0.162.1")],
+        )
+        self.assertIn(
+            "| Codex CLI | `0.162.1` |",
+            version_report.render_current_versions(version_report.current_versions(current)),
+        )
+
 
 if __name__ == "__main__":
     unittest.main()

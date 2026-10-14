@@ -68,6 +68,21 @@ def render_table(version_changes: list[tuple[str, str, str]]) -> str:
     return "\n".join(lines)
 
 
+def current_versions(current: dict) -> list[tuple[str, str]]:
+    result = []
+    for source in ("github", "npm"):
+        for key, version in current[source].items():
+            label = TOOL_NAMES[source].get(key, key)
+            result.append((label, str(version) if version else "not pinned"))
+    return result
+
+
+def render_current_versions(versions: list[tuple[str, str]]) -> str:
+    lines = ["| Tool | Current version |", "| --- | --- |"]
+    lines.extend(f"| {name} | `{version}` |" for name, version in versions)
+    return "\n".join(lines)
+
+
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--base-ref", required=True, help="Git ref containing the previous version manifest")
@@ -75,7 +90,8 @@ def main() -> int:
 
     version_changes = changes(load_manifest_at_ref(args.base_ref), load_current_manifest())
     if not version_changes:
-        print("No pinned tool versions changed.")
+        print("No pinned tool versions changed in this Feature release. Current pinned versions:\n")
+        print(render_current_versions(current_versions(load_current_manifest())))
     else:
         print(render_table(version_changes))
     return 0
