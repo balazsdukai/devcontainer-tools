@@ -22,6 +22,21 @@ esac
 
 export DEBIAN_FRONTEND=noninteractive
 
+curl_with_retry() {
+    local attempt=1
+
+    while ((attempt <= 5)); do
+        if curl -fsSL "$@"; then
+            return 0
+        fi
+        if ((attempt == 5)); then
+            return 1
+        fi
+        sleep "$((attempt * 2))"
+        attempt=$((attempt + 1))
+    done
+}
+
 apt-get update
 apt-get install -y --no-install-recommends \
     bash-completion \
@@ -49,7 +64,7 @@ install_nodejs() {
     local sources_list="/etc/apt/sources.list.d/nodesource.list"
 
     rm -f "$keyring"
-    curl -fsSL "https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key" |
+    curl_with_retry "https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key" |
         gpg --dearmor -o "$keyring"
     chmod 0644 "$keyring"
 
@@ -118,7 +133,7 @@ download_github_release_asset() {
         api_url="https://api.github.com/repos/${repo}/releases/latest"
     fi
     asset_url="$(
-        curl -fsSL "$api_url" |
+        curl_with_retry "$api_url" |
             jq -r --arg asset_regex "$asset_regex" \
                 '[.assets[] | select(.name | test($asset_regex)) | .browser_download_url][0] // empty'
     )"
@@ -128,7 +143,7 @@ download_github_release_asset() {
         exit 1
     fi
 
-    curl -fsSL "$asset_url" -o "$destination"
+    curl_with_retry -o "$destination" "$asset_url"
 }
 
 github_version() {
@@ -159,7 +174,7 @@ if [[ -n "$yq_version" ]]; then
 else
     yq_url="https://github.com/mikefarah/yq/releases/latest/download/yq_linux_${yq_arch}"
 fi
-curl -fsSL "$yq_url" -o /usr/local/bin/yq
+curl_with_retry -o /usr/local/bin/yq "$yq_url"
 chmod 0755 /usr/local/bin/yq
 
 download_github_release_asset "gitui-org/gitui" "$(github_version gitui-org/gitui)" "$gitui_asset_regex" "$tmp_dir/gitui.tar.gz"
