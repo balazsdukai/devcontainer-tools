@@ -4,10 +4,10 @@
     "gitui-org/gitui": "v0.28.1",
     "sxyazi/yazi": "v26.9.1",
     "helix-editor/helix": "25.07.1",
-    "casey/just": "1.58.0"
+    "casey/just": "1.59.0"
   },
   "npm": {
-    "@openai/codex": "0.162.1",
-    "@anthropic-ai/claude-code": "2.1.299"
+    "@openai/codex": "0.166.0",
+    "@anthropic-ai/claude-code": "2.1.316"
   }
 }
